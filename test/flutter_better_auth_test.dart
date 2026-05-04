@@ -1,15 +1,21 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
+
 import 'package:flutter_better_auth/flutter_better_auth.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'support/fake_cookie_storage.dart';
+
 void main() {
-  group("Test Flutter better Auth", () {
-    test('Test singleton', () async {
+  group('FlutterBetterAuth singleton', () {
+    test('BetterAuthClient instance is stable across lookups', () async {
       WidgetsFlutterBinding.ensureInitialized();
-      await FlutterBetterAuth.initialize(url: "http://10.2.2.0");
-      final betterAuthClient = FlutterBetterAuth.client;
-      final betterAuthClient2 = FlutterBetterAuth.client;
-      expect(betterAuthClient, betterAuthClient2);
+      await FlutterBetterAuth.initialize(
+        url: 'http://10.2.2.0',
+        store: FakeCookieStorage(),
+      );
+      final a = FlutterBetterAuth.client;
+      final b = FlutterBetterAuth.client;
+      expect(identical(a, b), isTrue);
     });
   });
 }

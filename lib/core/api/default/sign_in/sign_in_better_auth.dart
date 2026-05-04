@@ -46,6 +46,7 @@ abstract class SignInBetterAuth {
     @BodyExtra('rememberMe') String? rememberMe,
   });
 
+  /// Better Auth [`anonymous`](https://www.better-auth.com/docs/plugins/anonymous) plugin.
   @POST('/sign-in/anonymous')
   Future<Result<SignUpResponse>> anonymous();
 }

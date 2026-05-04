@@ -17,6 +17,9 @@ abstract class Session with _$Session {
     required String userId,
     String? impersonatedBy,
     String? activeOrganizationId,
+    /// Present when Better Auth [`organization`](https://www.better-auth.com/docs/plugins/organization)
+    /// is configured with `teams.enabled`.
+    String? activeTeamId,
   }) = _Session;
 
   factory Session.fromJson(Map<String, dynamic> json) =>

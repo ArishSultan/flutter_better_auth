@@ -86,7 +86,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 FilledButton(
                   onPressed: () async {
-                    final res = await client.signIn.social(
+                    await client.signIn.social(
                       provider: 'github',
                       disableRedirect: true,
                       callbackUrlScheme: "myapp",

@@ -14,24 +14,20 @@ _Account _$AccountFromJson(Map<String, dynamic> json) => _Account(
   accessToken: json['accessToken'] as String?,
   refreshToken: json['refreshToken'] as String?,
   idToken: json['idToken'] as String?,
-  accessTokenExpiresAt:
-      json['accessTokenExpiresAt'] == null
-          ? null
-          : DateTime.parse(json['accessTokenExpiresAt'] as String),
-  refreshTokenExpiresAt:
-      json['refreshTokenExpiresAt'] == null
-          ? null
-          : DateTime.parse(json['refreshTokenExpiresAt'] as String),
+  accessTokenExpiresAt: json['accessTokenExpiresAt'] == null
+      ? null
+      : DateTime.parse(json['accessTokenExpiresAt'] as String),
+  refreshTokenExpiresAt: json['refreshTokenExpiresAt'] == null
+      ? null
+      : DateTime.parse(json['refreshTokenExpiresAt'] as String),
   scope: json['scope'] as String?,
   password: json['password'] as String?,
-  createdAt:
-      json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-  updatedAt:
-      json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+  createdAt: json['createdAt'] == null
+      ? null
+      : DateTime.parse(json['createdAt'] as String),
+  updatedAt: json['updatedAt'] == null
+      ? null
+      : DateTime.parse(json['updatedAt'] as String),
 );
 
 Map<String, dynamic> _$AccountToJson(_Account instance) => <String, dynamic>{

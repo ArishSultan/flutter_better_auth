@@ -1,11 +1,18 @@
 import 'package:dio/dio.dart';
 
 class RemoveNullsInterceptor extends Interceptor {
+  /// Better Auth expects JSON `null` for some organization bodies (clear active org/team).
+  bool _preserveNullKeysForOrganizationBody(String urlPath) {
+    return urlPath.contains('/organization/set-active-team') ||
+        urlPath.endsWith('/organization/set-active');
+  }
+
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     final data = options.data;
 
-    if (data != null) {
+    if (data != null &&
+        !_preserveNullKeysForOrganizationBody(options.uri.path)) {
       if (_canCallToJson(data)) {
         final json = (data as dynamic).toJson();
         options.data = _removeNullsFromMap(json);

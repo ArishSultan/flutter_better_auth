@@ -12,14 +12,12 @@ _TokenResponse _$TokenResponseFromJson(Map<String, dynamic> json) =>
       idToken: json['idToken'] as String,
       accessToken: json['accessToken'] as String,
       refreshToken: json['refreshToken'] as String,
-      accessTokenExpiresAt:
-          json['accessTokenExpiresAt'] == null
-              ? null
-              : DateTime.parse(json['accessTokenExpiresAt'] as String),
-      refreshTokenExpiresAt:
-          json['refreshTokenExpiresAt'] == null
-              ? null
-              : DateTime.parse(json['refreshTokenExpiresAt'] as String),
+      accessTokenExpiresAt: json['accessTokenExpiresAt'] == null
+          ? null
+          : DateTime.parse(json['accessTokenExpiresAt'] as String),
+      refreshTokenExpiresAt: json['refreshTokenExpiresAt'] == null
+          ? null
+          : DateTime.parse(json['refreshTokenExpiresAt'] as String),
     );
 
 Map<String, dynamic> _$TokenResponseToJson(

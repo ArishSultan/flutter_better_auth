@@ -73,11 +73,14 @@
 - Remove log.
 - Add condition for social auth on web
 
-### Upcoming
+### 0.1.6
 
-- Two-Factor Authentication
-- PassKey
-- One-Tap
-- API Key and Organization support
-- One-time-token support
-- Etc ...
+- Add [**One-Time Token**](https://www.better-auth.com/docs/plugins/one-time-token) plugin (`client.oneTimeToken`): `GET /one-time-token/generate`, `POST /one-time-token/verify`.
+- Add [**Anonymous**](https://www.better-auth.com/docs/plugins/anonymous) plugin: `client.anonymous.deleteAnonymousUser()` (`POST /delete-anonymous-user`). Anonymous sign-in stays on `client.signIn.anonymous()` (`POST /sign-in/anonymous`).
+- Add [**Passkey**](https://www.better-auth.com/docs/plugins/passkey) plugin (`client.passkey`): full HTTP surface for [`@better-auth/passkey`](https://www.better-auth.com/docs/plugins/passkey) (generate/verify registration & authentication, list, delete, update). WebAuthn UI is left to the app (e.g. [`passkeys`](https://pub.dev/packages/passkeys)).
+- Add [**Organization**](https://www.better-auth.com/docs/plugins/organization) plugin (`client.organization`): Retrofit surface for org/members/invites/teams/roles/**`has-permission`**; **`set-active` / `set-active-team`** via Dio with JSON **`null`** preserved (**`RemoveNullsInterceptor`**); **`listMembersRaw`** for list-members query parity.
+- Add [**API Key**](https://www.better-auth.com/docs/plugins/api-key) plugin (`client.apiKey`).
+- Add [**Two-Factor**](https://www.better-auth.com/docs/plugins/two-factor) plugin (`client.twoFactor`).
+- **Session**: `Session.activeTeamId` where teams apply; regenerated client **`.g.dart`** where needed.
+- **Widgets**: `BetterAuthInherit.maybeOf`; **`StateError`** when `BetterAuthConsumer` is used outside **`BetterAuthProvider`**.
+- README updates (anonymous / passkey / org), **`SignInEmailResponse`** and model tests, example app updates.

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_better_auth/presentation/better_auth_inherit.dart';
 
 import '../flutter_better_auth.dart';
 

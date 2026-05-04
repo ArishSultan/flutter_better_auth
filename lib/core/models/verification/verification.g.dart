@@ -12,14 +12,12 @@ _Verification _$VerificationFromJson(Map<String, dynamic> json) =>
       identifier: json['identifier'] as String,
       value: json['value'] as String,
       expiresAt: DateTime.parse(json['expiresAt'] as String),
-      createdAt:
-          json['createdAt'] == null
-              ? null
-              : DateTime.parse(json['createdAt'] as String),
-      updatedAt:
-          json['updatedAt'] == null
-              ? null
-              : DateTime.parse(json['updatedAt'] as String),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
     );
 
 Map<String, dynamic> _$VerificationToJson(_Verification instance) =>

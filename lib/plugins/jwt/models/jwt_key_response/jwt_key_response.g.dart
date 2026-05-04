@@ -8,10 +8,9 @@ part of 'jwt_key_response.dart';
 
 _JwtKeyResponse _$JwtKeyResponseFromJson(Map<String, dynamic> json) =>
     _JwtKeyResponse(
-      keys:
-          (json['keys'] as List<dynamic>)
-              .map((e) => JwtKey.fromJson(e as Map<String, dynamic>))
-              .toList(),
+      keys: (json['keys'] as List<dynamic>)
+          .map((e) => JwtKey.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$JwtKeyResponseToJson(_JwtKeyResponse instance) =>

@@ -26,14 +26,15 @@ dependencies:
 - ✅ Email authentication
 - ✅ Phone number authentication
 - ✅ Username authentication
-- ✅ Anonymous authentication
+- ✅ Anonymous authentication — [`sign-in/anonymous`](https://www.better-auth.com/docs/plugins/anonymous) and [`delete-anonymous-user`](https://www.better-auth.com/docs/plugins/anonymous); see **Anonymous authentication** below
 - ✅ Admin
 - ✅ Email OTP
 - ✅ JWT
-- ⬜ Two-Factor Authentication
-- ⬜ API Key
-- ⬜ Organization
-- ⬜ One-time-token
+- ✅ Two-Factor Authentication
+- ✅ API Key
+- ✅ Organization
+- ✅ One-time-token
+- ✅ Passkey — [`@better-auth/passkey`](https://www.better-auth.com/docs/plugins/passkey); see **Passkey** below
 
 ## Usage
 
@@ -87,15 +88,56 @@ Or directly via:
 final client = FlutterBetterAuth.client;
 ```
 
+### Anonymous authentication
+
+Enable the **[`anonymous`](https://www.better-auth.com/docs/plugins/anonymous)** plugin on the server. This package exposes:
+
+| Action | Dart API |
+|--------|----------|
+| Sign in anonymously | `await client.signIn.anonymous()` — available from the default import (`flutter_better_auth.dart`); **`POST /sign-in/anonymous`**. |
+| Delete anonymous user | Import **`plugins/anonymous/anonymous_plugin.dart`**, then `await client.anonymous.deleteAnonymousUser()` — **`POST /delete-anonymous-user`** (requires an anonymous session; can be disabled on the server with `disableDeleteAnonymousUser`). |
+
+Linking an anonymous account when signing in another way (`onLinkAccount`) is configured only on the server.
+
+### Passkey
+
+Install [`@better-auth/passkey`](https://www.better-auth.com/docs/plugins/passkey) on the server. Import **`plugins/passkey/passkey_plugin.dart`** for **`client.passkey`**.
+
+This matches the official client’s **two-step** WebAuthn flow (see [`packages/passkey/src/client.ts`](https://github.com/better-auth/better-auth/blob/main/packages/passkey/src/client.ts)):
+
+| Step | Method | HTTP |
+|------|--------|------|
+| Registration options | `client.passkey.generateRegistrationOptions(...)` | `GET /passkey/generate-register-options` |
+| Verify registration | `client.passkey.verifyRegistration(body)` | `POST /passkey/verify-registration` — `body` includes `response` (registration JSON) and optional `name` |
+| Authentication options | `client.passkey.generateAuthenticationOptions()` | `GET /passkey/generate-authenticate-options` |
+| Verify sign-in | `client.passkey.verifyAuthentication(body)` | `POST /passkey/verify-authentication` — `body` includes `response` (authentication JSON); sets session |
+| List | `client.passkey.listUserPasskeys()` | `GET /passkey/list-user-passkeys` |
+| Delete | `client.passkey.deletePasskey(id: ...)` | `POST /passkey/delete-passkey` |
+| Rename | `client.passkey.updatePasskey(id: ..., name: ...)` | `POST /passkey/update-passkey` |
+
+#### Pub / WebAuthn dependencies
+
+- **`flutter_better_auth`:** passkey support is **HTTP-only** on top of [Dio](https://pub.dev/packages/dio) (already pulled in). This package’s **`pubspec.yaml`** does **not** list a WebAuthn plugin on purpose, so consumers who never use passkeys avoid extra native/binary weight.
+
+- **Your application:** completing registration or sign-in still needs a **credential ceremony** on the device (FIDO2 / WebAuthn). Add a WebAuthn-capable dependency **in your app’s `pubspec.yaml`**, for example **[`passkeys`](https://pub.dev/packages/passkeys)** on mobile—or use **`web`** / **`dart:js_interop`** and the browser’s **`navigator.credentials`** on web—or another approach you prefer. Translate the credential result into JSON and pass it as `response` inside the maps for `verifyRegistration` / `verifyAuthentication`.
+
+Ensure your Dio client sends a correct **`Origin`** (and cookies if you rely on cookie sessions) so [SimpleWebAuthn verification](https://www.better-auth.com/docs/plugins/passkey) on the server matches your RP settings.
+
 ## Using plugins
 
 To use available plugin, you can import them like:
 
 ```dart
 import 'package:flutter_better_auth/plugins/admin/admin_plugin.dart';
+import 'package:flutter_better_auth/plugins/anonymous/anonymous_plugin.dart';
 import 'package:flutter_better_auth/plugins/phone/phone_plugin.dart';
 import 'package:flutter_better_auth/plugins/email_otp/email_otp_plugin.dart';
 import 'package:flutter_better_auth/plugins/jwt/jwt_plugin.dart';
+import 'package:flutter_better_auth/plugins/api_key/api_key_plugin.dart';
+import 'package:flutter_better_auth/plugins/two_factor/two_factor_plugin.dart';
+import 'package:flutter_better_auth/plugins/organization/organization_plugin.dart';
+import 'package:flutter_better_auth/plugins/passkey/passkey_plugin.dart';
+import 'package:flutter_better_auth/plugins/one_time_token/one_time_token_plugin.dart';
 ```
 
 And now, it will be available in client. For example:
@@ -103,9 +145,19 @@ And now, it will be available in client. For example:
 ```dart
 client.phone // to access phone plugin 
 client.admin // to access admin plugin 
+client.anonymous // [`delete-anonymous-user`](https://www.better-auth.com/docs/plugins/anonymous) — anonymous sign-in: `client.signIn.anonymous()`
 client.emailOtp // to access email_otp plugin
 client.jwt // to access jwt plugin
+client.twoFactor // to access Two-Factor (TOTP, OTP, backup codes)
+client.apiKey // to access API Key plugin (create, verify, list, …)
+client.organization // organizations, members, invites, teams, dynamic roles, hasPermission
+client.passkey // WebAuthn: generate/verify registration & authentication, list, delete, update — see **Passkey** above
+client.oneTimeToken // Better Auth [`one-time-token`](https://www.better-auth.com/docs/plugins/one-time-token): generate / verify
 ```
+
+`getSession()` populates **`session.activeOrganizationId`** after you set an active org on the server, and **`session.activeTeamId`** when the organization plugin has **teams** enabled.
+
+Typed helpers such as **`client.organization.create`**, **`client.organization.inviteMember`**, and **`client.organization.addMember`** expose the usual body fields only. If you added **`schema.organization`**, **`schema.invitation`**, or **`schema.member`** additional fields on the server, use **`client.organization.createRaw(...)`**, **`client.organization.inviteMemberRaw(...)`**, or **`client.organization.addMemberRaw(...)`** with a JSON map matching that schema. For **`list-members`** filters whose **`filterValue`** is not a string (arrays, booleans, numbers), pass the full query map with **`client.organization.listMembersRaw({...})`**.
 
 ## Full Example
 
@@ -266,13 +318,14 @@ If the social provider does not support `idToken`, follow these steps:
 </manifest>
 ```
 
-3. **Configure your Better Auth server plugin:**
+1. **Configure your Better Auth server plugin:**
 
    Add `expo()` from `@better-auth/expo` to your Better Auth server plugin.
 
-4. **Add your callback scheme to trustedOrigins:**
+2. **Add your callback scheme to trustedOrigins:**
 
    In your Better Auth configuration, ensure that `YOUR_CALLBACK_URL_SCHEME_HERE://` is included in the `trustedOrigins` list.
+
 ```ts
 export const auth = betterAuth({
    trustedOrigins: ["YOUR_CALLBACK_URL_SCHEME_HERE://"]

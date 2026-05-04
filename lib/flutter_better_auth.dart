@@ -29,4 +29,5 @@ export 'core/models/user/user.dart';
 export 'core/models/verification/verification.dart';
 export 'plugins/phone/models/sign_in_phone_body.dart';
 export 'presentation/better_auth_consumer.dart';
+export 'presentation/better_auth_inherit.dart';
 export 'presentation/better_auth_provider.dart';

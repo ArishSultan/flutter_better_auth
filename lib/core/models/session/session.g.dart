@@ -10,19 +10,18 @@ _Session _$SessionFromJson(Map<String, dynamic> json) => _Session(
   id: json['id'] as String,
   token: json['token'] as String,
   expiresAt: DateTime.parse(json['expiresAt'] as String),
-  createdAt:
-      json['createdAt'] == null
-          ? null
-          : DateTime.parse(json['createdAt'] as String),
-  updatedAt:
-      json['updatedAt'] == null
-          ? null
-          : DateTime.parse(json['updatedAt'] as String),
+  createdAt: json['createdAt'] == null
+      ? null
+      : DateTime.parse(json['createdAt'] as String),
+  updatedAt: json['updatedAt'] == null
+      ? null
+      : DateTime.parse(json['updatedAt'] as String),
   ipAddress: json['ipAddress'] as String?,
   userAgent: json['userAgent'] as String?,
   userId: json['userId'] as String,
   impersonatedBy: json['impersonatedBy'] as String?,
   activeOrganizationId: json['activeOrganizationId'] as String?,
+  activeTeamId: json['activeTeamId'] as String?,
 );
 
 Map<String, dynamic> _$SessionToJson(_Session instance) => <String, dynamic>{
@@ -36,4 +35,5 @@ Map<String, dynamic> _$SessionToJson(_Session instance) => <String, dynamic>{
   'userId': instance.userId,
   'impersonatedBy': instance.impersonatedBy,
   'activeOrganizationId': instance.activeOrganizationId,
+  'activeTeamId': instance.activeTeamId,
 };
