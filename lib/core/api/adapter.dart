@@ -22,7 +22,7 @@ class BetterAuthCallAdapter<T>
       return Result.err(
         BetterError(
           code: res?.data?['code'] ?? "ERROR",
-          message: res?.data?['message'] ?? e.message,
+          message: res?.data?['message'] ?? e.message ?? 'UNKNOWN ERROR',
           stack: s.toString(),
         ),
       );
