@@ -21,6 +21,8 @@ passkeys, API keys, admin, phone, email-OTP, JWT, one-time-token, anonymous).
 - [Social / OAuth](#social--oauth) · [redirect](#redirect-flow-github-etc) · [idToken (Google)](#idtoken-flow-google-native)
 - [Phone number](#phone-number)
 - [Email OTP](#email-otp)
+- [Magic Link](#magic-link)
+- [Multi-Session](#multi-session)
 - [Two-Factor (2FA)](#two-factor-2fa)
 - [Passkey (WebAuthn)](#passkey-webauthn)
 - [Admin](#admin)
@@ -336,6 +338,33 @@ await client.emailOtp.resetPassword(email: 'test@mail.com', otp: '123456', passw
 
 `type` is one of `'sign-in'`, `'email-verification'`, `'forget-password'`.
 
+## Magic Link
+
+Requires the `magicLink()` server plugin. The server delivers the link; the user
+opens it, your app handles the deep link, then you verify the `token`.
+
+```dart
+import 'package:flutter_better_auth/plugins/magic_link/magic_link_plugin.dart';
+
+// Request a magic link by email
+await client.magicLink.signIn(email: 'test@mail.com', callbackURL: 'myapp://');
+
+// After the user opens the link, exchange the token for a session
+await client.magicLink.verify(token: '<token-from-deep-link>');
+```
+
+## Multi-Session
+
+Requires the `multiSession()` server plugin — multiple signed-in accounts on one device.
+
+```dart
+import 'package:flutter_better_auth/plugins/multi_session/multi_session_plugin.dart';
+
+final sessions = await client.multiSession.listDeviceSessions();
+await client.multiSession.setActive(sessionToken: '<token>');
+await client.multiSession.revoke(sessionToken: '<token>');
+```
+
 ## Two-Factor (2FA)
 
 Requires the `twoFactor()` server plugin.
@@ -511,6 +540,8 @@ import 'package:flutter_better_auth/plugins/two_factor/two_factor_plugin.dart'; 
 import 'package:flutter_better_auth/plugins/organization/organization_plugin.dart'; // client.organization
 import 'package:flutter_better_auth/plugins/passkey/passkey_plugin.dart';        // client.passkey
 import 'package:flutter_better_auth/plugins/one_time_token/one_time_token_plugin.dart'; // client.oneTimeToken
+import 'package:flutter_better_auth/plugins/magic_link/magic_link_plugin.dart';        // client.magicLink
+import 'package:flutter_better_auth/plugins/multi_session/multi_session_plugin.dart';   // client.multiSession
 ```
 
 ## Example app

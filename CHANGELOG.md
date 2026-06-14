@@ -1,5 +1,13 @@
 # Changelog
 
+### 0.4.0
+
+**Added**
+
+- [**Magic Link**](https://www.better-auth.com/docs/plugins/magic-link) plugin (`client.magicLink`): `signIn(email:, …)` (`POST /sign-in/magic-link`) and `verify(token:)` (`GET /magic-link/verify`).
+- [**Multi-Session**](https://www.better-auth.com/docs/plugins/multi-session) plugin (`client.multiSession`): `listDeviceSessions()`, `setActive(sessionToken:)`, `revoke(sessionToken:)`.
+- Example harness tabs and README sections for both.
+
 ### 0.3.0
 
 **Breaking**

@@ -10,6 +10,8 @@ import 'tabs/api_key_tab.dart';
 import 'tabs/auth_tab.dart';
 import 'tabs/email_otp_tab.dart';
 import 'tabs/jwt_ott_tab.dart';
+import 'tabs/magic_link_tab.dart';
+import 'tabs/multi_session_tab.dart';
 import 'tabs/organization_tab.dart';
 import 'tabs/passkey_tab.dart';
 import 'tabs/phone_tab.dart';
@@ -82,6 +84,8 @@ class HomeScreen extends StatelessWidget {
           ('Passkey', const PasskeyTab()),
           ('Phone', const PhoneTab()),
           ('Email OTP', const EmailOtpTab()),
+          ('Magic Link', const MagicLinkTab()),
+          ('Multi-Session', const MultiSessionTab()),
           ('JWT / OTT', const JwtOttTab()),
         ];
         return DefaultTabController(
