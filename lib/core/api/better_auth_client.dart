@@ -98,4 +98,10 @@ abstract class BetterAuthClient {
   Future<Result<StatusResponse>> revokeOtherSessions({
     @Body(nullToAbsent: true) Map<String, dynamic> body = const {},
   });
+
+  /// Verifies the current user's password (e.g. before a sensitive action).
+  @POST('/verify-password')
+  Future<Result<StatusResponse>> verifyPassword({
+    @BodyExtra('password') required String password,
+  });
 }

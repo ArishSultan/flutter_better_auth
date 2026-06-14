@@ -64,6 +64,35 @@ class _EmailOtpTabState extends State<EmailOtpTab> {
             () => c.emailOtp.verifyEmail(email: _email.text, otp: _otp.text),
           ),
         ),
+        Act(
+          'Check verification OTP',
+          () => runAction(
+            _console,
+            'emailOtp.checkVerificationOtp',
+            () => c.emailOtp.checkVerificationOtp(
+              email: _email.text,
+              type: 'sign-in',
+              otp: _otp.text,
+            ),
+          ),
+        ),
+        const SectionLabel('Change email'),
+        Act(
+          'Request email change',
+          () => runAction(
+            _console,
+            'emailOtp.requestEmailChange',
+            () => c.emailOtp.requestEmailChange(newEmail: _email.text),
+          ),
+        ),
+        Act(
+          'Change email',
+          () => runAction(
+            _console,
+            'emailOtp.changeEmail',
+            () => c.emailOtp.changeEmail(newEmail: _email.text, otp: _otp.text),
+          ),
+        ),
         const SectionLabel('Password reset'),
         Act(
           'Forgot password (OTP)',

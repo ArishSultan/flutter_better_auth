@@ -7,6 +7,7 @@ import '../sign_up/models/sign_up_response/sign_up_response.dart';
 import 'models/email/sign_in_email_response.dart';
 import 'models/social/sign_in_social_response.dart';
 import 'models/social/social_id_token_body.dart';
+import 'models/username/username_available_response.dart';
 
 part 'sign_in_better_auth.g.dart';
 
@@ -49,4 +50,11 @@ abstract class SignInBetterAuth {
   /// Better Auth [`anonymous`](https://www.better-auth.com/docs/plugins/anonymous) plugin.
   @POST('/sign-in/anonymous')
   Future<Result<SignUpResponse>> anonymous();
+
+  /// Better Auth [`username`](https://www.better-auth.com/docs/plugins/username)
+  /// plugin: checks whether [username] is free.
+  @POST('/is-username-available')
+  Future<Result<UsernameAvailableResponse>> isUsernameAvailable({
+    @BodyExtra('username') required String username,
+  });
 }

@@ -235,6 +235,44 @@ class _SignInBetterAuth implements SignInBetterAuth {
     return BetterAuthCallAdapter<SignUpResponse>().adapt(() => _anonymous());
   }
 
+  Future<HttpResponse<UsernameAvailableResponse>> _isUsernameAvailable({
+    required String username,
+  }) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = <String, dynamic>{'username': username};
+    final _options = _setStreamType<Result<UsernameAvailableResponse>>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/is-username-available',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch<Map<String, dynamic>>(_options);
+    late UsernameAvailableResponse _value;
+    try {
+      _value = UsernameAvailableResponse.fromJson(_result.data!);
+    } on Object catch (e, s) {
+      errorLogger?.logError(e, s, _options, response: _result);
+      rethrow;
+    }
+    final httpResponse = HttpResponse(_value, _result);
+    return httpResponse;
+  }
+
+  @override
+  Future<Result<UsernameAvailableResponse>> isUsernameAvailable({
+    required String username,
+  }) {
+    return BetterAuthCallAdapter<UsernameAvailableResponse>().adapt(
+      () => _isUsernameAvailable(username: username),
+    );
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

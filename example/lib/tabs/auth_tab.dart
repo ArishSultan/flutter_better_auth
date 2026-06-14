@@ -85,6 +85,14 @@ class _AuthTabState extends State<AuthTab> {
           'Sign in (anonymous)',
           () => runAction(_console, 'signIn.anonymous', () => c.signIn.anonymous()),
         ),
+        Act(
+          'Username available?',
+          () => runAction(
+            _console,
+            'signIn.isUsernameAvailable',
+            () => c.signIn.isUsernameAvailable(username: _username.text),
+          ),
+        ),
         const SectionLabel('Session'),
         Act(
           'Get session',
@@ -114,6 +122,14 @@ class _AuthTabState extends State<AuthTab> {
               newPassword: _newPassword.text,
               currentPassword: _password.text,
             ),
+          ),
+        ),
+        Act(
+          'Verify password',
+          () => runAction(
+            _console,
+            'verifyPassword',
+            () => c.verifyPassword(password: _password.text),
           ),
         ),
         Act(

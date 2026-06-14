@@ -77,6 +77,29 @@ class _AdminTabState extends State<AdminTab> {
             () => c.admin.setRole(userId: _userId.text, role: _role.text),
           ),
         ),
+        Act(
+          'Set user password',
+          () => runAction(
+            _console,
+            'admin.setUserPassword',
+            () => c.admin.setUserPassword(
+              userId: _userId.text,
+              newPassword: _password.text,
+            ),
+          ),
+        ),
+        Act(
+          'Has permission (user:create)',
+          () => runAction(
+            _console,
+            'admin.hasPermission',
+            () => c.admin.hasPermission(
+              permissions: {
+                'user': ['create'],
+              },
+            ),
+          ),
+        ),
         const SectionLabel('Moderation'),
         Act(
           'Ban user',

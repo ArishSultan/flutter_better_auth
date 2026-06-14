@@ -192,6 +192,9 @@ await client.changePassword(
   revokeOtherSessions: true,
 );
 
+// Verify the current password (e.g. before a sensitive action)
+await client.verifyPassword(password: '12345678');
+
 // Forgot / reset password
 await client.forgotPassword(email: 'test@mail.com');
 await client.resetPassword(newPassword: '87654321', token: '<token-from-email>');
@@ -217,6 +220,10 @@ await client.signIn.username(
   password: '12345678',
   rememberMe: true,
 );
+
+// Check availability before sign-up
+final res = await client.signIn.isUsernameAvailable(username: 'testuser');
+final free = res.data?.available;
 ```
 
 ## Anonymous
@@ -334,6 +341,11 @@ await client.emailOtp.verifyEmail(email: 'test@mail.com', otp: '123456');
 // Password reset by OTP
 await client.emailOtp.forgotPassword(email: 'test@mail.com');
 await client.emailOtp.resetPassword(email: 'test@mail.com', otp: '123456', password: '87654321');
+
+// Check an OTP without consuming it; change email
+await client.emailOtp.checkVerificationOtp(email: 'test@mail.com', type: 'sign-in', otp: '123456');
+await client.emailOtp.requestEmailChange(newEmail: 'new@mail.com');
+await client.emailOtp.changeEmail(newEmail: 'new@mail.com', otp: '123456');
 ```
 
 `type` is one of `'sign-in'`, `'email-verification'`, `'forget-password'`.
@@ -424,6 +436,8 @@ await client.admin.listUsers(limit: 20, offset: 0, searchValue: 'john');
 await client.admin.getUser(id: '<user-id>');
 await client.admin.createUser(email: 'new@mail.com', password: '12345678', name: 'New', role: 'user');
 await client.admin.setRole(userId: '<id>', role: 'admin');
+await client.admin.setUserPassword(userId: '<id>', newPassword: '87654321');
+await client.admin.hasPermission(permissions: {'user': ['create']});
 
 await client.admin.banUser(userId: '<id>', banReason: 'spam', banExpiresIn: 86400);
 await client.admin.unbanUser(userId: '<id>');

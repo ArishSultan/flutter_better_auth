@@ -45,4 +45,26 @@ abstract class EmailOtpBetterAuth {
     @BodyExtra('otp') required String otp,
     @BodyExtra('password') required String password,
   });
+
+  /// Verifies an OTP without consuming it.
+  @POST('/email-otp/check-verification-otp')
+  Future<Result<SuccessResponse>> checkVerificationOtp({
+    @BodyExtra('email') required String email,
+    @BodyExtra('type') required String type,
+    @BodyExtra('otp') required String otp,
+  });
+
+  /// Requests an email-change OTP for the authenticated user.
+  @POST('/email-otp/request-email-change')
+  Future<Result<SuccessResponse>> requestEmailChange({
+    @BodyExtra('newEmail') required String newEmail,
+    @BodyExtra('otp') String? otp,
+  });
+
+  /// Confirms an email change with the OTP.
+  @POST('/email-otp/change-email')
+  Future<Result<SuccessResponse>> changeEmail({
+    @BodyExtra('newEmail') required String newEmail,
+    @BodyExtra('otp') required String otp,
+  });
 }

@@ -92,4 +92,15 @@ abstract class AdminBetterAuth {
   Future<Result<StatusResponse>> removeUser({
      @BodyExtra('userId') required String userId,
   });
+
+  @POST('/admin/has-permission')
+  Future<Result<CheckPermissionResponse>> hasPermission({
+    @BodyExtra('permissions') required Map<String, dynamic> permissions,
+  });
+
+  @POST('/admin/set-user-password')
+  Future<Result<StatusResponse>> setUserPassword({
+    @BodyExtra('userId') required String userId,
+    @BodyExtra('newPassword') required String newPassword,
+  });
 }
